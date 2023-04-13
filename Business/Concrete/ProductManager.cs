@@ -26,15 +26,22 @@ namespace Business.Concrete
         {
             _productDal = productDal;
         }
+
         [ValidationAspect(typeof(ProductValidator))]
         public IResult Add(Product product)
         {
-         
-            _productDal.Add(product);
+            if (CheckIfProductCountOfCategoryCorrect(product.CategoryId).Success)
+            {
+                _productDal.Add(product);
 
-            return new SuccessResult(Messages.ProductAdded);
+                return new SuccessResult(Messages.ProductAdded);
+            }
+            return new ErrorResult(); 
+
+
         }
 
+        [ValidationAspect(typeof(ProductValidator))]
         public IResult Delete(Product product)
         {
             _productDal.Delete(product);
@@ -71,10 +78,36 @@ namespace Business.Concrete
             return new SuccessDataResult<List<ProductDetailDto>>(_productDal.GetProductDetails());
         }
 
+        [ValidationAspect(typeof(ProductValidator))]
         public IResult Update(Product product)
         {
             _productDal.Update(product);
             return new SuccessResult(Messages.ProductModified);
+        }
+
+        private IResult CheckIfProductCountOfCategoryCorrect(int categoryId) 
+        {
+            //Select count(*) from products where categoryId=1
+            var result = _productDal.GetAll(p => p.CategoryId == categoryId).Count;
+            if (result>=15)
+            {
+                return new ErrorResult(Messages.ProductCountOfCategoryError);
+
+            }
+            return new SuccessResult(); 
+        }
+
+
+        private IResult CheckIfProductNameExist(string productName)
+        {
+            
+            var result = _productDal.GetAll(p => p.ProductName == productName).Any();
+            if (result)
+            {
+                return new ErrorResult(Messages.ProductNameAlreadyExists);
+
+            }
+            return new SuccessResult();
         }
     }
 }
