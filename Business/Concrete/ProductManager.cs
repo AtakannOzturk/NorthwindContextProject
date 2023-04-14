@@ -50,6 +50,7 @@ namespace Business.Concrete
 
         }
 
+        //[SecuredOperation("product.add")]
         [ValidationAspect(typeof(ProductValidator))]
         public IResult Delete(Product product)
         {
@@ -122,9 +123,9 @@ namespace Business.Concrete
         //private IResult CheckIfCategoryLımıtExceded()
         //{
         //    var result = _categoryService.GetAll;
-        //    if (result.Data.Count>15)
-        //   {
-        //        return new ErrorResult(Messages.CategoryLımıtExceded);
+        //    if (result.Data.Count > 15)
+        //    {
+        //       return new ErrorResult(Messages.CategoryLımıtExceded);
         //    }
         //    return new SuccessResult();
         //}
