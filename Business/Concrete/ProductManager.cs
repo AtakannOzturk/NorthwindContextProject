@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.BusinessAccess.Autofac;
 using Business.Constans;
 using Business.DependencyResolvers.ValidationRules.FluentValidation;
 using Core.Aspects.Autofac.Validation;
@@ -31,7 +32,7 @@ namespace Business.Concrete
             _categoryService = categoryService;
            
         }
-
+        [SecuredOperation("product.add")]
         [ValidationAspect(typeof(ProductValidator))]
         public IResult Add(Product product)
         {
