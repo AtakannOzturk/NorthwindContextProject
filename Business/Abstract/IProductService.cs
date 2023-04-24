@@ -20,5 +20,7 @@ namespace Business.Abstract
         IResult Delete(Product product);
         IDataResult<Product> GetById(int productid);
 
+        IResult AddTransactionalTest(Product product);
+
     }
 }
